@@ -24,8 +24,8 @@ if __name__=='__main__':
           'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
                }
  
-        
-        response = requests.get('https://show.bilibili.com/api/ticket/project/getV2?version=134&id='+detail_id+'&project_id='+detail_id+'&requestSource=pc-new', headers=headers)
+        url='https://show.bilibili.com/api/ticket/project/getV2?version=134&id='+detail_id+'&project_id='+detail_id+'&requestSource=pc-new'
+        response = requests.get(url=url, headers=headers)
         response=response.json()
         if(response['data']['is_sale']!=0 or response['data']['sale_begin']!=0 or  response['data']['sale_end']!=0 or response['data']['sale_flag']!='不可售'):
            is_sale=response['data']['is_sale']
