@@ -88,9 +88,23 @@ if __name__=='__main__':
          if(response['data']['is_sale']!=0 or response['data']['sale_begin']!=0 or  response['data']['sale_end']!=0 or response['data']['sale_flag']!='不可售'):
            is_sale=response['data']['is_sale']
            sale_begin=response['data']['sale_begin']
+           if(int(sale_begin)!=0):
+              #转换成localtime
+              time_local = time.localtime(sale_begin)
+              #转换成新的时间格式(2016-05-05 20:28:54)
+              start_readtime = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
+           else:
+              start_readtime='0'
            sale_end=response['data']['sale_end']
+           if(int(sale_end)!=0):
+              #转换成localtime
+              time_local = time.localtime(sale_end)
+              #转换成新的时间格式(2016-05-05 20:28:54)
+              end_readtime = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
+           else:
+              end_readtime='0'
            sale_flag=response['data']['sale_flag']
-           msg=title+str(detail_id)+'有新变化：\nis_sale：'+str(is_sale)+'\nsale_begin：'+str(sale_begin)+'\nsale_end：'+str(sale_end)+'\nsale_flag：'+sale_flag+'\n'
+           msg=title+str(detail_id)+'有新变化：\n是否可售：'+str(is_sale)+'\n售票开始时间：'+str(start_readtime)+'\n售票结束时间：'+str(end_readtime)+'\n状态：'+sale_flag+'\n'
            logger.info(msg)
            try:
             ding_push_message()
@@ -107,4 +121,4 @@ if __name__=='__main__':
               
          time.sleep(30)   
        except Exception as e:
-          logger.error('\n推送出错!\n'+e)
+          logger.error('\n本轮请求出错!\n'+e)
