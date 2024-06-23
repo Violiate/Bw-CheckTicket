@@ -5,7 +5,7 @@ from loguru import logger
 
 
 
-detail_id="86615"
+detail_id="85939"
 web_url = "https://oapi.dingtalk.com/robot/send?access_token="  #填写钉钉推送token
 bl = "https://api.day.app/"   #填写bark推送token
 token = '' #在pushpush网站中可以找到，填写pushpush推送token
