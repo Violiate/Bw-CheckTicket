@@ -85,7 +85,7 @@ if __name__=='__main__':
          response = requests.get(url=url, headers=headers)
          response=response.json()
          title=response['data']['name']
-         if(response['data']['is_sale']!=0 or response['data']['sale_begin']!=0 or  response['data']['sale_end']!=0 or response['data']['sale_flag']!='不可售' or  "screen_list" in response["data"]):
+         if(response['data']['is_sale']!=0 or response['data']['sale_begin']!=0 or  response['data']['sale_end']!=0 or response['data']['sale_flag']!='不可售' ):#or  "screen_list" in response["data"]):
            logger.debug(response)
            is_sale=response['data']['is_sale']
            sale_begin=response['data']['sale_begin']
