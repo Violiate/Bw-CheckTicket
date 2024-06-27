@@ -55,9 +55,12 @@ def send2bark(self,title, content):
         
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         try:
-            msg = "{0}/{1}/{2}/?isArchive=1".format(bl, title, content)
-            link = msg
-            res = requests.get(link, verify=False)
+
+            for i in range(4):
+             msg = "{0}/{1}/{2}/?sound=update".format(bl, title, content)
+             link = msg  
+             res = requests.get(link, verify=False)
+             time.sleep(6)
         except Exception as e:
             logger.error('Reason:', e)
             return
