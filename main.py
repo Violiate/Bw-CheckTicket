@@ -88,7 +88,8 @@ if __name__=='__main__':
          response = requests.get(url=url, headers=headers)
          response=response.json()
          title=response['data']['name']
-         if(response['data']['is_sale']!=0 or response['data']['sale_begin']!=0 or  response['data']['sale_end']!=0 or response['data']['sale_flag']!='不可售' ):#or  "screen_list" in response["data"]):
+         if(response['data']['is_sale']!=1 or response['data']['sale_begin']!=1719633600 or  response['data']['sale_end']!=1719655140 or response['data']['sale_flag']!='未开售' or  len(response["data"]["screen_list" ])!=5):
+           title=response['data']['name']
            logger.debug(response)
            is_sale=response['data']['is_sale']
            sale_begin=response['data']['sale_begin']
@@ -125,4 +126,5 @@ if __name__=='__main__':
               
          time.sleep(30)   
        except Exception as e:
-          logger.error('\n本轮请求出错!\n'+e)
+          logger.debug(response.text)
+          logger.error('\n本轮请求出错!\n')
