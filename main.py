@@ -10,6 +10,7 @@ web_url = "https://oapi.dingtalk.com/robot/send?access_token="  #填写钉钉推
 bl = "https://api.day.app/"   #填写bark推送token
 token = '' #在pushpush网站中可以找到，填写pushpush推送token
 
+
 logger.add("loguru.log")
 def ding_push_message():
     # 构建请求头部
@@ -68,6 +69,21 @@ def send2bark(self,title, content):
 
 if __name__=='__main__':
    for i in range(999999999):
+       try:
+        with open("settings.json",'r',encoding='utf-8')as settings_f:
+         settings=json.load(settings_f)
+       except:
+           
+                
+            settings={}
+            
+            settings['sale_begin']=0
+            settings['sale_end']=0
+            settings['is_sale']=0
+            settings['sale_flag']='0'
+            settings['length']=0
+            with open("settings.json",'w',encoding='utf-8')as settings_f:
+                 json.dump(settings, settings_f,ensure_ascii=False)
        headers = {
           'authority': 'show.bilibili.com',
           'accept': '*/*',
@@ -87,12 +103,19 @@ if __name__=='__main__':
        try:
          response = requests.get(url=url, headers=headers)
          response=response.json()
-         title=response['data']['name']
-         if(response['data']['is_sale']!=1 or response['data']['sale_begin']!=1719633600 or  response['data']['sale_end']!=1719655140 or response['data']['sale_flag']!='未开售' or  len(response["data"]["screen_list" ])!=5):
+
+         if(response['data']['is_sale']!= settings['is_sale'] or response['data']['sale_begin']!= settings['sale_begin'] or  response['data']['sale_end']!= settings['sale_end'] or response['data']['sale_flag']!=settings['sale_flag'] or  len(response["data"]["screen_list" ])!=settings['length']):
            title=response['data']['name']
            logger.debug(response)
            is_sale=response['data']['is_sale']
            sale_begin=response['data']['sale_begin']
+           settings['sale_begin']=response['data']['sale_begin']
+           settings['sale_end']=response['data']['sale_end']
+           settings['is_sale']=response['data']['is_sale']
+           settings['sale_flag']= response['data']['sale_flag']
+           settings['length']=len(response["data"]["screen_list" ])
+           with open("settings.json",'w',encoding='utf-8')as settings_f:
+                 json.dump(settings, settings_f,ensure_ascii=False)
            if(int(sale_begin)!=0):
               #转换成localtime
               time_local = time.localtime(sale_begin)
@@ -109,20 +132,20 @@ if __name__=='__main__':
            else:
               end_readtime='0'
            sale_flag=response['data']['sale_flag']
-           msg=title+str(detail_id)+'有新变化：\n是否可售：'+str(is_sale)+'\n售票开始时间：'+str(start_readtime)+'\n售票结束时间：'+str(end_readtime)+'\n状态：'+sale_flag+'\n'
+           msg=title+' '+str(detail_id)+'有新变化：\n是否可售：'+str(is_sale)+'\n售票开始时间：'+str(start_readtime)+'\n售票结束时间：'+str(end_readtime)+'\n状态：'+sale_flag+'\n'
            logger.info(msg)
            try:
             ding_push_message()
            except Exception as e:
-              logger.error('\n钉钉推送出错!\n'+e)
+              logger.error('\n钉钉推送出错!\n')
            try:
             pushplus_notify('监控'+title+'有新变化！',msg)
            except Exception as e:
-              logger.error('\nPushPlus推送出错!\n'+e)
+              logger.error('\nPushPlus推送出错!\n')
            try:
             send2bark(1,'监控'+title+'有新变化！',msg)
            except Exception as e:
-              logger.error('\nbark推送出错!\n'+e)
+              logger.error('\nbark推送出错!\n')
               
          time.sleep(30)   
        except Exception as e:
