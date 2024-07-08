@@ -1,3 +1,4 @@
+
 import requests,json,urllib3
 import datetime,time
 from loguru import logger
@@ -5,9 +6,9 @@ from loguru import logger
 
 
 detail_id="85939"
-web_url = "https://oapi.dingtalk.com/robot/send?access_token="  #填写钉钉推送token
-bl = "https://api.day.app/"   #填写bark推送token
-token = '' #在pushpush网站中可以找到，填写pushplus推送token
+web_url = "https://oapi.dingtalk.com/robot/send?access_token=26680d667cc6860559f53e8fd53cbf455c3674d11eacbc4eecdddd9725783851"  #填写钉钉推送token
+bl = "https://api.day.app/hAdbx27XRCDgBQPc4XMFKQ"   #填写bark推送token
+token = '4a0c9b63e67344999364da63390f33b5' #在pushpush网站中可以找到，填写pushpush推送token
 
 logger.add("loguru.log")
 def ding_push_message():
@@ -66,7 +67,8 @@ def send2bark(self,title, content):
         return
 
 if __name__=='__main__':
-   for i in range(9999999999):
+   while True:
+       
        try:
         with open("settings.json",'r',encoding='utf-8')as settings_f:
          settings=json.load(settings_f)
