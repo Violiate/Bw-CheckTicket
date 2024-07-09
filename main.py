@@ -68,7 +68,7 @@ def send2bark(self,title, content):
         return
 
 if __name__=='__main__':
-   for i in range(999999999):
+   while True:
        try:
         with open("settings.json",'r',encoding='utf-8')as settings_f:
          settings=json.load(settings_f)
@@ -147,7 +147,7 @@ if __name__=='__main__':
            except Exception as e:
               logger.error('\nbark推送出错!\n')
               
-         time.sleep(30)   
+         time.sleep(8)   
        except Exception as e:
           logger.debug(response.text)
           logger.error('\n本轮请求出错!\n')
